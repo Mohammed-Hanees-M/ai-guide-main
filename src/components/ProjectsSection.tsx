@@ -132,8 +132,8 @@ const ProjectsSection = () => {
 
         {/* 3D Carousel */}
         <div
-          className="relative h-[600px] md:h-[700px] flex items-center justify-center"
-          style={{ perspective: '1500px' }}
+          className="relative h-[600px] md:h-[700px] flex items-center justify-center max-w-full"
+          style={{ perspective: '1600px' }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
@@ -165,7 +165,7 @@ const ProjectsSection = () => {
               return (
                 <div
                   key={project.title}
-                  className="absolute w-[320px] md:w-[420px] transition-all duration-700 ease-out cursor-pointer"
+                  className="absolute w-[240px] md:w-[300px] transition-all duration-700 ease-out cursor-pointer"
                   style={style}
                   onClick={() => {
                     setIsAutoPlaying(false);
@@ -197,8 +197,8 @@ const ProjectsSection = () => {
                         {/* Status Badge */}
                         <div className="absolute top-4 right-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${project.status === 'Ongoing'
-                              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                              : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                            : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                             }`}>
                             {project.status}
                           </span>
@@ -270,8 +270,8 @@ const ProjectsSection = () => {
               aria-label={`Go to project ${index + 1}`}
             >
               <div className={`w-12 h-1 rounded-full transition-all duration-500 ${index === currentIndex
-                  ? 'bg-gradient-to-r from-primary to-accent'
-                  : 'bg-muted-foreground/20 group-hover:bg-muted-foreground/40'
+                ? 'bg-gradient-to-r from-primary to-accent'
+                : 'bg-muted-foreground/20 group-hover:bg-muted-foreground/40'
                 }`} />
               {index === currentIndex && (
                 <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-full blur-sm animate-pulse" />

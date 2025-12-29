@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  // ✅ REQUIRED for GitHub Pages
+  // GitHub Pages configuration
   base: "/ai-guide-main/",
 
   server: {

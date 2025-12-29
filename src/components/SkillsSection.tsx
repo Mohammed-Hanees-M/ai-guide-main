@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { 
-  Code2, 
-  Brain, 
-  Database, 
-  BarChart3, 
-  Eye, 
+import {
+  Code2,
+  Brain,
+  Database,
+  BarChart3,
+  Eye,
   Wrench,
   ChevronLeft,
   ChevronRight
@@ -82,7 +82,7 @@ const SkillsSection = () => {
   const getCardStyle = (index: number) => {
     const diff = (index - currentIndex + totalSkills) % totalSkills;
     const normalizedDiff = diff > totalSkills / 2 ? diff - totalSkills : diff;
-    
+
     const angle = normalizedDiff * 60;
     const radius = 400;
     const zOffset = Math.cos((angle * Math.PI) / 180) * radius;
@@ -122,9 +122,9 @@ const SkillsSection = () => {
         </div>
 
         {/* 3D Carousel */}
-        <div 
-          className="relative h-[500px] flex items-center justify-center"
-          style={{ perspective: '1200px' }}
+        <div
+          className="relative h-[500px] flex items-center justify-center max-w-full"
+          style={{ perspective: '1400px' }}
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
@@ -143,18 +143,18 @@ const SkillsSection = () => {
           </button>
 
           {/* Carousel Track */}
-          <div 
+          <div
             className="relative w-full h-full flex items-center justify-center"
             style={{ transformStyle: 'preserve-3d' }}
           >
             {skills.map((skill, index) => {
               const Icon = skill.icon;
               const style = getCardStyle(index);
-              
+
               return (
                 <div
                   key={skill.name}
-                  className="absolute w-72 md:w-80 transition-all duration-700 ease-out cursor-pointer"
+                  className="absolute w-56 md:w-64 transition-all duration-700 ease-out cursor-pointer"
                   style={style}
                   onClick={() => {
                     setIsAutoPlaying(false);
@@ -164,7 +164,7 @@ const SkillsSection = () => {
                   <div className="relative group">
                     {/* Glow Effect */}
                     <div className={`absolute -inset-1 bg-gradient-to-r ${skill.color} rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300`} />
-                    
+
                     {/* Card */}
                     <div className="relative glass rounded-2xl p-6 border border-white/10 backdrop-blur-xl">
                       {/* Icon */}
@@ -237,11 +237,10 @@ const SkillsSection = () => {
                 setIsAutoPlaying(false);
                 setCurrentIndex(index);
               }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex 
-                  ? 'w-8 bg-gradient-to-r from-primary to-accent' 
-                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-              }`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                ? 'w-8 bg-gradient-to-r from-primary to-accent'
+                : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                }`}
             />
           ))}
         </div>
