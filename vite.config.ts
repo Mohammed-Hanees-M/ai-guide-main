@@ -1,21 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
-export default defineConfig(({ mode }) => ({
-  // ✅ REQUIRED for Vercel (do NOT use repo name here)
+export default defineConfig({
+  // ✅ REQUIRED for Vercel
   base: "/",
 
-  server: {
-    host: "::",
-    port: 8080,
-  },
-
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-  ].filter(Boolean),
+  plugins: [react()],
 
   resolve: {
     alias: {
@@ -27,4 +18,4 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist",
     emptyOutDir: true,
   },
-}));
+});
