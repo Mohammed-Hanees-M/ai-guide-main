@@ -56,6 +56,81 @@
     <div id="root"></div>
 
     <!-- ✅ MUST BE EXACTLY THIS -->
+    <!-- Error overlay for production preview: shows runtime errors on the page -->
+    <script>
+      (function () {
+        function showOverlay(message) {
+          try {
+            var container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.left = '0';
+            container.style.top = '0';
+            container.style.right = '0';
+            container.style.background = 'rgba(20,20,20,0.95)';
+            container.style.color = 'white';
+            container.style.zIndex = 999999;
+            container.style.padding = '20px';
+            container.style.fontFamily = 'monospace';
+            container.style.whiteSpace = 'pre-wrap';
+            container.innerText = 'Runtime error:\n\n' + message;
+            (document.body || document.documentElement).appendChild(container);
+          } catch (e) {
+            console.error('Error showing overlay', e);
+          }
+        }
+
+        function attachHandlers() {
+          window.addEventListener('error', function (ev) {
+            var msg = ev && ev.error && ev.error.stack ? ev.error.stack : (ev.message || String(ev));
+            console.error('Captured error:', ev.error || ev.message || ev);
+            showOverlay(msg);
+          });
+
+          window.addEventListener('unhandledrejection', function (ev) {
+            var reason = ev && ev.reason ? ev.reason : ev;
+            var msg = reason && reason.stack ? reason.stack : String(reason);
+            console.error('Unhandled rejection:', reason);
+            showOverlay(msg);
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', attachHandlers);
+        } else {
+          attachHandlers();
+        }
+      })();
+    </script>
+
+        <script>
+          // Debug helper: if the app hasn't mounted after 1.5s, show helpful message
+          setTimeout(function () {
+            try {
+              var root = document.getElementById('root');
+              var content = root ? root.innerHTML.trim() : null;
+              if (!content) {
+                var msg = 'App did not mount: `#root` is empty after 1.5s.\nThis indicates the bundle may not have run or an early runtime error prevented mounting.';
+                console.warn(msg);
+                var el = document.createElement('div');
+                el.style.position = 'fixed';
+                el.style.left = '0';
+                el.style.top = '0';
+                el.style.right = '0';
+                el.style.background = 'rgba(200,60,60,0.95)';
+                el.style.color = 'white';
+                el.style.zIndex = 999999;
+                el.style.padding = '18px';
+                el.style.fontFamily = 'monospace';
+                el.style.whiteSpace = 'pre-wrap';
+                el.innerText = msg + '\n\nOpen DevTools → Console for details.';
+                (document.body || document.documentElement).appendChild(el);
+              }
+            } catch (e) {
+              console.error('Debug check failed', e);
+            }
+          }, 1500);
+        </script>
+
     <script type="module" src="/src/main.tsx"></script>
 
   </body>

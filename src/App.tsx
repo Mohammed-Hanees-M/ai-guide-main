@@ -22,7 +22,12 @@ const App = () => {
         <Toaster />
         <Sonner />
 
-        <BrowserRouter basename={import.meta.env.PROD ? "/ai-guide-main" : "/"}>
+        {/** Use Vite's BASE_URL so builds served from a subpath work,
+         *  while local previews served at `/` also work. BASE_URL may end
+         *  with a trailing slash, remove it for `basename`. */}
+        <BrowserRouter
+          basename={(import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/"}
+        >
           <Routes>
             <Route path="/" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
