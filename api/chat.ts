@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import Groq from "groq-sdk";
+import OpenAI from "openai";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY!,
+const client = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY!, // ✅ FIXED
+  baseURL: "https://api.groq.com/openai/v1", // ✅ GROQ endpoint
 });
 
 export default async function handler(
@@ -16,8 +17,12 @@ export default async function handler(
   try {
     const { message } = req.body;
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    const completion = await client.chat.completions.create({
+      model: "llama3-70b-8192", // ✅ GROQ model
       messages: [
         {
           role: "system",
@@ -25,24 +30,36 @@ export default async function handler(
 You are an AI Portfolio Assistant for Mohammed Hanees M,
 a Master of Science student in Data Science.
 
-Rules:
-- If asked "What is your name?" → say:
+Your purpose is to assist recruiters and visitors by answering
+questions about:
+- Education
+- Skills
+- Projects
+- Experience
+- Certifications
+- Resume
+
+Identity rules:
+- If asked "What is your name?" say:
   "I am the AI Portfolio Assistant for Mohammed Hanees M."
-- If asked "Who are you?" → say:
+- If asked "Who are you?" say:
   "I am a customized AI assistant designed to present Mohammed Hanees M’s portfolio."
-- Answer only about Mohammed Hanees M.
-- Be professional and concise.
-          `,
+
+Response style:
+- Professional and concise
+- Portfolio-focused
+- No hallucination
+`
         },
         { role: "user", content: message },
       ],
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       reply: completion.choices[0].message.content,
     });
   } catch (error) {
-    console.error("Groq Error:", error);
-    res.status(500).json({ error: "AI response failed" });
+    console.error("Chat API error:", error);
+    return res.status(500).json({ error: "AI response failed" });
   }
 }
