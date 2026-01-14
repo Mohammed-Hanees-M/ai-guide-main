@@ -22,7 +22,7 @@ const App = () => {
         <Toaster />
         <Sonner />
 
-        <BrowserRouter basename="/ai-guide-main">
+        <BrowserRouter basename={import.meta.env.PROD ? "/ai-guide-main" : "/"}>
           <Routes>
             <Route path="/" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
