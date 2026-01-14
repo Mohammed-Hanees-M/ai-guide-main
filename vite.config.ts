@@ -4,8 +4,16 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  // GitHub Pages configuration
-  base: "/ai-guide-main/",
+  /**
+   * IMPORTANT:
+   * - GitHub Pages needs base: "/ai-guide-main/"
+   * - Vercel MUST have base: "/"
+   *
+   * This condition fixes EVERYTHING.
+   */
+  base: mode === "production" && process.env.VERCEL
+    ? "/"
+    : "/ai-guide-main/",
 
   server: {
     host: "::",
