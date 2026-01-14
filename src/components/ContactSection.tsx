@@ -1,114 +1,136 @@
+import { useState } from "react";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 const ContactSection = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await emailjs.send(
+        "service_j6z98wq",        // 🔴 replace
+        "template_vjj9m3q",       // 🔴 replace
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "ZH2hoSXLp4rdp85Dn"         // 🔴 replace
+      );
+
+      alert("Message sent successfully!");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      alert("Failed to send message. Try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 relative">
-      <div className="floating-orb w-80 h-80 bg-accent/10 -right-40 bottom-0" />
-
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-sm font-mono text-primary mb-4 block">Get in Touch</span>
+          <span className="text-sm font-mono text-primary mb-4 block">
+            Get in Touch
+          </span>
           <h2 className="section-title">Contact</h2>
         </div>
 
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="space-y-6">
-            <div className="glass rounded-xl p-6 gradient-border hover:bg-secondary/30 transition-all duration-300">
+            <div className="glass rounded-xl p-6 gradient-border">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Mail className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <a
-                    href="mailto:haneeshaneesmullakkal@gmail.com"
-                    className="text-foreground hover:text-primary transition-colors"
-                  >
-                    haneeshaneesmullakkal@gmail.com
-                  </a>
-                </div>
+                <Mail className="w-5 h-5 text-primary" />
+                <a
+                  href="mailto:haneeshaneesmullakkal@gmail.com"
+                  className="hover:text-primary"
+                >
+                  haneeshaneesmullakkal@gmail.com
+                </a>
               </div>
             </div>
 
-            <div className="glass rounded-xl p-6 gradient-border hover:bg-secondary/30 transition-all duration-300">
+            <div className="glass rounded-xl p-6 gradient-border">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Phone className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Phone</p>
-                  <a
-                    href="tel:+918156953080"
-                    className="text-foreground hover:text-primary transition-colors"
-                  >
-                    +91 8156953080
-                  </a>
-                </div>
+                <Phone className="w-5 h-5 text-primary" />
+                <a href="tel:+918156953080">+91 8156953080</a>
               </div>
             </div>
 
-            <div className="glass rounded-xl p-6 gradient-border hover:bg-secondary/30 transition-all duration-300">
+            <div className="glass rounded-xl p-6 gradient-border">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <MapPin className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="text-foreground">
-                    Christ (Deemed to be University), Bangalore - 560073
-                  </p>
-                  <p className="text-muted-foreground text-sm">Kerala, India</p>
-                </div>
+                <MapPin className="w-5 h-5 text-primary" />
+                <p>Christ University, Bangalore</p>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
           <div className="glass rounded-xl p-8 gradient-border">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name
-                </label>
+                <label className="block text-sm mb-2">Name</label>
                 <input
-                  type="text"
                   id="name"
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-secondary"
                   placeholder="Your name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email
-                </label>
+                <label className="block text-sm mb-2">Email</label>
                 <input
-                  type="email"
                   id="email"
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-secondary"
                   placeholder="your@email.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Message
-                </label>
+                <label className="block text-sm mb-2">Message</label>
                 <textarea
                   id="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-lg bg-secondary resize-none"
                   placeholder="Your message..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all duration-300 glow-primary"
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-white font-semibold"
               >
                 <Send size={18} />
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
