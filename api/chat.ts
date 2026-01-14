@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY!, // MUST match Vercel
+  apiKey: process.env.GROQ_API_KEY!, // ✅ FIXED
   baseURL: "https://api.groq.com/openai/v1",
 });
 
@@ -38,11 +38,8 @@ Answer questions about:
 - Certifications
 - Resume
 
-Identity rules:
-If asked "Who are you?":
+If asked "Who are you?", reply:
 "I am a customized AI assistant designed to present Mohammed Hanees M’s portfolio."
-
-Be professional, concise, and portfolio-focused.
           `,
         },
         { role: "user", content: message },
@@ -52,8 +49,8 @@ Be professional, concise, and portfolio-focused.
     return res.status(200).json({
       reply: completion.choices[0].message.content,
     });
-  } catch (err) {
-    console.error("Chat API error:", err);
+  } catch (error) {
+    console.error("Chat API error:", error);
     return res.status(500).json({ error: "AI response failed" });
   }
 }
