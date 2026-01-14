@@ -3,10 +3,11 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 export default defineConfig({
-  // ✅ REQUIRED for Vercel
   base: "/",
 
-  plugins: [react()],
+  plugins: [
+    react(), // ✅ ONLY React plugin
+  ],
 
   resolve: {
     alias: {
