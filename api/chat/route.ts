@@ -1,14 +1,12 @@
 import OpenAI from "openai";
 
-export const runtime = "edge"; // ✅ IMPORTANT
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { message } = await req.json();
+    const { message } = await request.json();
 
     if (!message) {
       return new Response(
@@ -23,23 +21,15 @@ export async function POST(req: Request) {
         {
           role: "system",
           content: `
-You are an AI Portfolio Assistant for Mohammed Hanees M,
+You are the AI Portfolio Assistant for Mohammed Hanees M,
 a Master of Science student in Data Science.
-
-Your job is to answer questions about:
-- Education
-- Skills
-- Projects
-- Experience
-- Certifications
-- Resume
 
 Rules:
 - If asked "Who are you?" say:
   "I am the AI Portfolio Assistant for Mohammed Hanees M."
+- Answer only about his portfolio
 - Be professional and concise
-- Do NOT hallucinate information
-`,
+          `,
         },
         { role: "user", content: message },
       ],
@@ -49,10 +39,13 @@ Rules:
       JSON.stringify({
         reply: completion.choices[0].message.content,
       }),
-      { status: 200 }
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   } catch (error) {
-    console.error("Chat API error:", error);
+    console.error("Chat API Error:", error);
     return new Response(
       JSON.stringify({ error: "AI response failed" }),
       { status: 500 }
